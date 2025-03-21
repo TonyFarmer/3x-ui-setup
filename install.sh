@@ -15,12 +15,13 @@ pass_create() {
 		# Выход из цикла если пароль больше 4 символов и совпал повторно
 		if [[ ${#PASS} -gt 4 ]]
 		then
-			read -ps "${green}Повтори пароль: ${green}" $REPEAT_PASS
+			read -p "${green}Повтори пароль: ${green}" -se REPEAT_PASS
 			if [[ $REPEAT_PASS = $PASS ]]
 			then 
 				break
 			else
 				echo "${red}Пароль не совпадает: ${red}"
+				PASS=" "
 			fi
 		else
 			echo "${red}Пароль должен быть больше 4 символов: ${red}"
