@@ -10,8 +10,8 @@ pass_create() {
 	PASS=" "
 	while [[ ${#PASS} -le 4 ]]
 	do
-		read -p "${green}Придумай пароль: ${green}" -se $PASS
-
+		read -p "${green}Придумай пароль: ${green}" -se PASS
+		echo $PASS
 		# Выход из цикла если пароль больше 4 символов и совпал повторно
 		if [[ ${#PASS} -gt 4 ]]
 		then
