@@ -5,13 +5,35 @@ blue='\033[0;34m'
 yellow='\033[0;33m'
 plain='\033[0m'
 
+# Задание пароля
+pass_create() {
+	PASS=""
+	while [[ ${#PASS} -le 4 ]]
+	do
+		read -ps "${green}Придумай пароль: ${green}" $PASS
 
-# Первоначальная настройка
+		# Выход из цикла если пароль больше 4 символов и совпал повторно
+		if [[ ${#PASS} -gt 4 ]]
+		then
+			read -ps "${green}Повтори пароль: ${green}" $REPEAT_PASS
+			if [[ $REPEAT_PASS = $PASS ]]
+			then 
+				break
+			else
+				echo "${red}Пароль не совпадает: ${red}"
+			fi
+		else
+			echo "${red}Пароль должен быть больше 4 символов: ${red}"
+		fi
+	done
+
+}
+
+# Загрузка пакетов и создание юзера
 init_setup() {
-	echo "\033[0;34mОбновление и загрузка пакетов"
+	echo "${blue}Обновление и загрузка пакетов${blue}"
 	apt update && apt upgrade -y
 	apt install sudo vim net-tools tree ncdu bash-completion curl dnsutils htop iftop pwgen screen wget git -y
-
 
 	# Задание юзера
 	echo -e "${blue}Задание юзера${blue}"
@@ -21,11 +43,12 @@ init_setup() {
 	then
 		echo "Юзер $USERNAME уже существует"
 	else
-		read -p "Придумай пароль: " $PASS
-		while [[ ${#PASS} -le 4 ]]
-		do
-			read -p "Пароль должен быть больше 4 символов: " PASS
-		done
+		pass_create
+		# read -p "Придумай пароль: " $PASS
+		# while [[ ${#PASS} -le 4 ]]
+		# do
+		# 	read -p "Пароль должен быть больше 4 символов: " PASS
+		# done
 	
 		sudo useradd -m -s /bin/bash $USERNAME
 		sudo usermod -aG sudo $USERNAME
@@ -37,7 +60,6 @@ init_setup() {
 	fi
 }
 
-
 	
 # Установка панели
 panel_download() {
@@ -46,7 +68,13 @@ panel_download() {
 	then
 		echo "3xui уже установлен"
 	finally
-		sudo bash < <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+		{
+			sudo bash < <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+			exit 1
+		} ||
+		{
+			exit 0
+		}
 	fi
 }
 
