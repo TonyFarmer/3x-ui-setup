@@ -7,10 +7,10 @@ plain='\033[0m'
 
 # Задание пароля
 pass_create() {
-	PASS=""
+	PASS=" "
 	while [[ ${#PASS} -le 4 ]]
 	do
-		read -ps "${green}Придумай пароль: ${green}" $PASS
+		read -p "${green}Придумай пароль: ${green}" -se $PASS
 
 		# Выход из цикла если пароль больше 4 символов и совпал повторно
 		if [[ ${#PASS} -gt 4 ]]
