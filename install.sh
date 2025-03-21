@@ -11,30 +11,28 @@ init_setup() {
 
 	# Задание юзера
 	echo -e "\033[0;34mЗадание юзера\033[0m"
-	read -p "Автоматически задать параметры? 1 - да; 0 - нет (default): " -e CHOICE
 
-	if [[ $CHOICE == "" ]] || [[ $CHOICE == "0" ]]
-	then 
-		read -p "Напиши юзернейм: " USERNAME
-		if grep $USERNAME /etc/passwd
-		then
-			echo "Юзер $USERNAME уже существует"
-		else
-			read -p "Придумай пароль: " $PASS
-			while [[ ${#PASS} -le 4 ]]
-			do
-				read -p "Пароль должен быть больше 4 символов: " PASS
-			done
-		fi
+	read -p "Напиши юзернейм: " USERNAME
+	if grep $USERNAME /etc/passwd
+	then
+		echo "Юзер $USERNAME уже существует"
 	else
-		echo "Auto"
-		USERNAME="user"
-		PASS="qwerty"
-	fi
+		read -p "Придумай пароль: " $PASS
+		while [[ ${#PASS} -le 4 ]]
+		do
+			read -p "Пароль должен быть больше 4 символов: " PASS
+		done
+	
+		sudo useradd -m -s /bin/bash $USERNAME
+		sudo usermod -aG sudo $USERNAME
+		ENCRYPTED_PASSWORD=$(openssl passwd -1 "$PASS")
+		sudo usermod --password "$ENCRYPTED_PASSWORD" "$USERNAME"
 
-	echo "Username: $USERNAME"
-	echo "Password: $PASS"
+		echo "Username: $USERNAME"
+		echo "Password: $PASS"
+	fi
 }
+
 
 	
 # Установка панели
