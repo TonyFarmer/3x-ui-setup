@@ -1,5 +1,9 @@
 #!/bin/bash
-
+red='\033[0;31m'
+green='\033[0;32m'
+blue='\033[0;34m'
+yellow='\033[0;33m'
+plain='\033[0m'
 
 
 # Первоначальная настройка
@@ -10,7 +14,7 @@ init_setup() {
 
 
 	# Задание юзера
-	echo -e "\033[0;34mЗадание юзера\033[0m"
+	echo -e "${blue}Задание юзера${blue}"
 
 	read -p "Напиши юзернейм: " USERNAME
 	if grep $USERNAME /etc/passwd
@@ -37,7 +41,7 @@ init_setup() {
 	
 # Установка панели
 panel_download() {
-	echo -e "\033[0;34mУстановка панели\033[0m"	
+	echo -e "${blue}Установка панели${blue}"	
 	if sudo find /usr/local -name x-ui
 	then
 		echo "3xui уже установлен"
@@ -48,7 +52,7 @@ panel_download() {
 
 # Сканер ip-адресов в одной подсети
 ip_scan() {
-	echo -e "\033[0;34mСканер ip-адресов в одной подсети\033[0m"
+	echo -e "${blue}Сканер ip-адресов в одной подсети${blue}"
 
 	read -p "Установка языка GO. Версия (по умолчанию 1.24.1): " -e GO_VERSION
 	rm -rf /usr/local/go
